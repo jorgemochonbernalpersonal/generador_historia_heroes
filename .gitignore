@@ -1,0 +1,29 @@
+# Entorno virtual
+venv/
+env/
+ENV/
+.venv
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Archivos generados por el programa (directorio historias)
+historias/
+
+# Variables de entorno
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

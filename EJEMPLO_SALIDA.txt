@@ -1,0 +1,78 @@
+==================================================
+    GENERADOR DE SUPERHÉROES CON IA
+==================================================
+
+==================================================
+    MENÚ PRINCIPAL
+==================================================
+
+  1. Nivel 1: Crear un superhéroe simple (sin IA)
+  2. Nivel 2: Crear un superhéroe con IA
+  3. Nivel 2 Avanzado: Crear varios superhéroes automáticamente
+  4. Salir
+
+==================================================
+
+  Elige una opción (1-4): 3
+
+==================================================
+    GENERADOR DE SUPERHÉROES CON IA
+==================================================
+
+NIVEL 2 AVANZADO: Crear varios superhéroes automáticamente
+--------------------------------------------------
+
+Vamos a crear historias para estos superhéroes:
+
+  1. Rayo Veloz - Poder: velocidad y electricidad
+  2. Sombra Nocturna - Poder: invisibilidad
+  3. Fuerza Mental - Poder: telequinesis
+
+Presiona ENTER para comenzar a generar las historias... 
+
+[1/3] Generando historia de Rayo Veloz...
+  ✓ Historia de Rayo Veloz completada!
+
+[2/3] Generando historia de Sombra Nocturna...
+  ✓ Historia de Sombra Nocturna completada!
+
+[3/3] Generando historia de Fuerza Mental...
+  ✓ Historia de Fuerza Mental completada!
+
+==================================================
+  TODAS LAS HISTORIAS GENERADAS
+==================================================
+
+==================================================
+  RAYO VELOZ
+==================================================
+
+[HISTORIA GENERADA POR IA]
+Crea una historia corta y divertida sobre un superhéroe llamado Rayo Veloz que tiene el poder de velocidad y electricidad. Su poder viene de un accidente con un rayo. La historia debe ser de 3-4 párrafos y debe ser emocionante.
+
+Esta es una historia increíble sobre el superhéroe que describiste.
+
+==================================================
+  SOMBRA NOCTURNA
+==================================================
+
+[HISTORIA GENERADA POR IA]
+Crea una historia corta y divertida sobre un superhéroe llamado Sombra Nocturna que tiene el poder de invisibilidad. Su poder viene de un experimento científico. La historia debe ser de 3-4 párrafos y debe ser emocionante.
+
+Esta es una historia increíble sobre el superhéroe que describiste.
+
+==================================================
+  FUERZA MENTAL
+==================================================
+
+[HISTORIA GENERADA POR IA]
+Crea una historia corta y divertida sobre un superhéroe llamado Fuerza Mental que tiene el poder de telequinesis. Su poder viene de nacimiento con poderes especiales. La historia debe ser de 3-4 párrafos y debe ser emocionante.
+
+Esta es una historia increíble sobre el superhéroe que describiste.
+
+==================================================
+
+¡Listo! Se generaron 3 historias automáticamente.
+Sin programación, tendrías que hacerlo una por una manualmente.
+
+Presiona ENTER para volver al menú...

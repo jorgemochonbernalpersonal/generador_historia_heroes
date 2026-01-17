@@ -1,0 +1,15 @@
+# Dependencias para el Generador de Superhéroes con IA
+# 
+# Para usar el programa en modo demo (sin IA real), no necesitas instalar nada.
+# Python 3.6 o superior es suficiente.
+#
+# Si quieres usar una IA real, descomenta la línea correspondiente:
+
+# Para OpenAI (ChatGPT):
+# openai>=1.0.0
+
+# Para Anthropic (Claude):
+# anthropic>=0.18.0
+
+# Otras dependencias opcionales:
+# (ninguna por ahora)
