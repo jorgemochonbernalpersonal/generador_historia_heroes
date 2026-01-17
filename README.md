@@ -16,22 +16,27 @@ python generador_superheroes.py
 
 ## 🚀 Cómo empezar
 
-### Para principiantes (Nivel 1)
+### 📚 Progresión de aprendizaje (recomendada)
 
+**PASO 1: Empieza con la versión simple** (para entender lo básico)
 1. Abre el archivo `generador_superheroes_simple.py`
 2. Ejecútalo con: `python generador_superheroes_simple.py`
 3. Responde las preguntas que te hace el programa
 4. ¡Mira el resultado!
+5. **Aprende:** Entrada → Proceso → Salida (sin funciones, sin IA)
 
-### Versión completa (Nivel 2)
-
+**PASO 2: Luego usa la versión completa** (con IA y automatización)
 1. Abre el archivo `generador_superheroes.py`
 2. Ejecútalo con: `python generador_superheroes.py`
 3. Elige una opción del menú:
    - **Opción 1**: Crear un superhéroe simple (sin IA)
    - **Opción 2**: Crear un superhéroe con IA (más creativo)
    - **Opción 3**: Crear VARIOS superhéroes automáticamente (¡esto es lo más importante!)
-   - **Opción 4**: Modo Aleatorio - Generar superhéroes aleatorios (¡divertido!)
+   - **Opción 4**: Modo Aleatorio con IA - Generar superhéroes aleatorios (¡divertido!)
+   - **Opción 5**: Ver historias guardadas
+   - **Opción 6**: Ver estadísticas
+   - **Opción 7**: Ver información sobre el programa
+   - **Opción 8**: Salir
 
 ## 📋 Qué hace el programa
 
@@ -50,11 +55,11 @@ python generador_superheroes.py
 - **Automáticamente** crea una historia para cada uno
 - Muestra todas las historias
 
-### Modo Aleatorio (Opción 4)
+### Modo Aleatorio con IA (Opción 4)
 - El programa genera superhéroes aleatorios automáticamente
 - Tú eliges cuántos quieres generar (1-10)
 - El programa crea nombres, poderes y orígenes aleatorios
-- Luego genera las historias automáticamente
+- **Usa IA para generar historias creativas** para cada superhéroe
 - **Más divertido, menos control** - perfecto para experimentar
 
 **Esto es lo que NO puedes hacer solo conversando con la IA:**
@@ -91,13 +96,22 @@ La versión simple sí. La versión con IA necesita que el profesor haya configu
 
 El programa funciona en **modo demo** sin configuración, pero puedes usar una IA real:
 
-### Opción rápida (5 minutos):
-1. **Groq (Gratis)**: Ve a https://console.groq.com/, crea cuenta, obtén API key
-2. Instala: `pip install groq`
-3. Edita `generador_superheroes.py` y reemplaza la función `pedir_a_la_ia()` con el código de `ejemplo_configuracion_ia.py`
+### Opción rápida (3 minutos) - Groq (Gratis):
+1. Ve a https://console.groq.com/ y crea cuenta (gratis, sin tarjeta)
+2. Crea una API key en "API Keys"
+3. Instala: `pip install groq python-dotenv`
+4. Crea un archivo `.env` en la carpeta del proyecto:
+   ```
+   GROQ_API_KEY=tu_clave_aqui
+   ```
+5. ¡Listo! El programa usará la IA real automáticamente
+
+**Nota:** El archivo `.env` está protegido (no se sube a Git), así que tu clave está segura.
 
 ### Otras opciones gratuitas:
 - **OpenAI**: $5 créditos gratis al registrarte
 - **Hugging Face**: 100% gratis (puede ser más lento)
+
+**Nota:** El código actual está configurado para **Groq**. Si quieres usar otra API (OpenAI, Hugging Face, etc.), debes modificar la función `pedir_a_la_ia()` en el código. Ver `INSTRUCCIONES_PROFESOR.md` para más detalles.
 
 📖 **Ver `INSTRUCCIONES_PROFESOR.md`** para instrucciones detalladas y todas las opciones.

@@ -1,8 +1,8 @@
 # Instrucciones para el Profesor
 
-## 🚀 GUÍA RÁPIDA: Configurar IA en 5 minutos
+## 🚀 GUÍA RÁPIDA: Configurar IA en 3 minutos
 
-### Opción más fácil: Groq (Gratis y rápido)
+### Opción más fácil: Groq (Gratis y rápido) ⭐ RECOMENDADO
 
 1. **Crear cuenta en Groq:**
    - Ve a: https://console.groq.com/
@@ -10,41 +10,41 @@
    - Ve a "API Keys" y crea una nueva clave
    - Copia la clave (empieza con `gsk_...`)
 
-2. **Instalar la librería:**
+2. **Instalar las librerías:**
    ```bash
-   pip install groq
+   pip install groq python-dotenv
    ```
 
-3. **Editar el archivo `generador_superheroes.py`:**
-   - Busca la función `pedir_a_la_ia()` (línea ~32)
-   - Reemplaza TODO el contenido de la función con este código:
+3. **Configurar el archivo .env (más seguro):**
+   - Copia el archivo `env.example` y renómbralo a `.env`
+   - O crea un archivo nuevo llamado `.env` en la carpeta del proyecto
+   - Abre el archivo `.env` y escribe:
+     ```
+     GROQ_API_KEY=tu_clave_aqui
+     ```
+   - Reemplaza `tu_clave_aqui` con tu clave real de Groq
 
-   ```python
-   from groq import Groq
-
-   def pedir_a_la_ia(mensaje):
-       client = Groq(api_key="TU_CLAVE_AQUI")  # Pega tu clave aquí
-       
-       response = client.chat.completions.create(
-           model="llama-3.1-8b-instant",
-           messages=[
-               {"role": "system", "content": "Eres un escritor creativo que crea historias de superhéroes para niños de 10 años. Las historias deben ser cortas (3-4 párrafos), emocionantes y apropiadas para niños."},
-               {"role": "user", "content": mensaje}
-           ],
-           max_tokens=300,
-           temperature=0.8
-       )
-       
-       return response.choices[0].message.content
+4. **¡Listo!** Ejecuta el programa:
+   ```bash
+   python generador_superheroes.py
    ```
+   - Elige la opción 2, 3 o 4 del menú para probar la IA real
+   - Opción 2: Un superhéroe con IA
+   - Opción 3: Varios superhéroes automáticamente con IA
+   - Opción 4: Superhéroes aleatorios con IA
 
-4. **¡Listo!** Ejecuta el programa y prueba la opción 2 o 3 del menú.
+**Nota:** El archivo `.env` no se sube a Git (está protegido), así que tu clave está segura.
 
 ---
 
 ## Configuración de la función de IA
 
-Para que el programa funcione con una IA real, debes modificar la función `pedir_a_la_ia()` en el archivo `generador_superheroes.py`.
+**IMPORTANTE:** El programa ya está configurado para usar **Groq** automáticamente. Solo necesitas crear el archivo `.env` con tu API key de Groq (ver guía rápida arriba). **NO necesitas modificar el código.**
+
+**Si quieres usar otra API (OpenAI, Hugging Face, etc.):**
+- Debes modificar la función `pedir_a_la_ia()` en `generador_superheroes.py`
+- Ver sección "CÓDIGOS PARA CONFIGURAR" más abajo
+- Puedes leer la API key del archivo `.env` usando `os.getenv("NOMBRE_DE_LA_VARIABLE")`
 
 ## 🆓 OPCIONES GRATUITAS PARA PROBAR
 
@@ -99,12 +99,29 @@ El código actual funciona en modo demo sin necesidad de API. Los niños pueden 
 
 ### Opción 1: Usando OpenAI (ChatGPT) - Con créditos gratuitos
 
+**Paso 1:** Añade tu API key al archivo `.env`:
+```
+OPENAI_API_KEY=tu_clave_openai_aqui
+```
+
+**Paso 2:** Modifica la función `pedir_a_la_ia()` en `generador_superheroes.py`:
+
 ```python
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Cargar variables del .env
 
 def pedir_a_la_ia(mensaje):
-    # Reemplaza "TU_API_KEY_AQUI" con tu clave de OpenAI
-    client = OpenAI(api_key="TU_API_KEY_AQUI")
+    # Leer API key del archivo .env
+    API_KEY_OPENAI = os.getenv("OPENAI_API_KEY")
+    
+    if not API_KEY_OPENAI:
+        # Si no está configurada, usar modo demo
+        return "Historia de ejemplo..."
+    
+    client = OpenAI(api_key=API_KEY_OPENAI)
     
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",  # Modelo económico
@@ -126,13 +143,27 @@ pip install openai
 
 ### Opción 2: Usando Hugging Face (100% gratis)
 
+**Paso 1:** Añade tu token al archivo `.env`:
+```
+HUGGINGFACE_API_KEY=tu_token_huggingface_aqui
+```
+
+**Paso 2:** Modifica la función `pedir_a_la_ia()` en `generador_superheroes.py`:
+
 ```python
 import requests
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Cargar variables del .env
 
 def pedir_a_la_ia(mensaje):
-    # Reemplaza "TU_TOKEN_AQUI" con tu token de Hugging Face
-    API_TOKEN = "TU_TOKEN_AQUI"
+    # Leer token del archivo .env
+    API_TOKEN = os.getenv("HUGGINGFACE_API_KEY")
+    
+    if not API_TOKEN:
+        # Si no está configurada, usar modo demo
+        return "Historia de ejemplo..."
     API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium"
     
     headers = {"Authorization": f"Bearer {API_TOKEN}"}
@@ -163,14 +194,35 @@ pip install requests
 
 **Nota:** Hugging Face puede tener límites de velocidad. Si falla, el programa usará un mensaje de ejemplo.
 
-### Opción 3: Usando Groq (Gratis y rápido) ⚡
+### Opción 3: Usando Groq (Gratis y rápido) ⚡ - **YA CONFIGURADO**
+
+**El código actual ya está configurado para Groq.** Solo necesitas:
+
+1. Añade tu API key al archivo `.env`:
+   ```
+   GROQ_API_KEY=tu_clave_groq_aqui
+   ```
+
+2. El código ya lee automáticamente del `.env` (no necesitas modificar nada)
+
+**Si quieres ver cómo funciona internamente:**
 
 ```python
 from groq import Groq
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Cargar variables del .env
 
 def pedir_a_la_ia(mensaje):
-    # Reemplaza "TU_API_KEY_AQUI" con tu clave de Groq
-    client = Groq(api_key="TU_API_KEY_AQUI")
+    # Leer API key del archivo .env
+    API_KEY_GROQ = os.getenv("GROQ_API_KEY") or os.getenv("API_KEY_GROQ")
+    
+    if not API_KEY_GROQ:
+        # Si no está configurada, usar modo demo
+        return "Historia de ejemplo..."
+    
+    client = Groq(api_key=API_KEY_GROQ)
     
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",  # Modelo rápido y gratuito
@@ -241,21 +293,48 @@ pip install requests
 pip install anthropic
 ```
 
-## Variables de entorno (recomendado)
+## 📝 Cómo funciona el archivo .env
 
-Para mayor seguridad, usa variables de entorno en lugar de poner la API key directamente en el código:
+El archivo `.env` es la forma más segura de guardar tus API keys. **NO se sube a Git** (está protegido).
+
+### Estructura del archivo .env:
+
+```
+# Para Groq (ya configurado en el código)
+GROQ_API_KEY=tu_clave_groq_aqui
+
+# Para OpenAI (requiere modificar código)
+OPENAI_API_KEY=tu_clave_openai_aqui
+
+# Para Hugging Face (requiere modificar código)
+HUGGINGFACE_API_KEY=tu_token_huggingface_aqui
+```
+
+### Cómo leer del .env en Python:
 
 ```python
 import os
+from dotenv import load_dotenv
 
-def pedir_a_la_ia(mensaje):
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    # ... resto del código
+# Cargar variables del archivo .env
+load_dotenv()
+
+# Leer una variable específica
+api_key = os.getenv("GROQ_API_KEY")  # Lee GROQ_API_KEY del .env
 ```
 
-Y configura la variable de entorno antes de ejecutar:
+### Alternativa: Variables de entorno del sistema
+
+También puedes configurar variables de entorno del sistema (menos recomendado para este proyecto):
+
+**Windows (PowerShell):**
+```powershell
+$env:GROQ_API_KEY="tu_clave_aqui"
+```
+
+**Linux/Mac:**
 ```bash
-export OPENAI_API_KEY="tu_key_aqui"
+export GROQ_API_KEY="tu_clave_aqui"
 ```
 
 ## Uso en clase

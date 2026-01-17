@@ -9,11 +9,15 @@
   1. Nivel 1: Crear un superhéroe simple (sin IA)
   2. Nivel 2: Crear un superhéroe con IA
   3. Nivel 2 Avanzado: Crear varios superhéroes automáticamente
-  4. Salir
+  4. Modo Aleatorio: Generar superhéroes aleatorios (¡divertido!)
+  5. Ver historias guardadas
+  6. Ver estadísticas
+  7. Ver información sobre el programa
+  8. Salir
 
 ==================================================
 
-  Elige una opción (1-4): 3
+  Elige una opción (1-8): 3
 
 ==================================================
     GENERADOR DE SUPERHÉROES CON IA

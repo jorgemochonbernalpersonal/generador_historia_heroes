@@ -1,0 +1,63 @@
+{
+  "nombres": [
+    "Rayo Veloz",
+    "Sombra Nocturna",
+    "Fuerza Mental",
+    "Aurora Brillante",
+    "Tormenta Eléctrica",
+    "Nebulosa",
+    "Fénix",
+    "Titanio",
+    "Vórtice",
+    "Cristal",
+    "Llama Azul",
+    "Hielo Eterno",
+    "Relámpago",
+    "Eco"
+  ],
+  "poderes": [
+    "velocidad sobrehumana",
+    "invisibilidad",
+    "telequinesis",
+    "volar",
+    "super fuerza",
+    "control del fuego",
+    "control del hielo",
+    "telepatía",
+    "regeneración",
+    "camuflaje",
+    "teletransportación",
+    "rayos láser",
+    "control magnético",
+    "manipulación del tiempo"
+  ],
+  "origenes": [
+    "un accidente con radiación",
+    "un experimento científico",
+    "nacimiento con poderes especiales",
+    "un encuentro con un meteorito",
+    "una mutación genética",
+    "un artefacto antiguo",
+    "entrenamiento extremo",
+    "una fusión con tecnología alienígena",
+    "un pacto místico",
+    "exposición a energía cósmica"
+  ],
+  "lista_predefinida": [
+    {
+      "nombre": "Rayo Veloz",
+      "poder": "velocidad y electricidad",
+      "origen": "un accidente con un rayo"
+    },
+    {
+      "nombre": "Sombra Nocturna",
+      "poder": "invisibilidad",
+      "origen": "un experimento científico"
+    },
+    {
+      "nombre": "Fuerza Mental",
+      "poder": "telequinesis",
+      "origen": "nacimiento con poderes especiales"
+    }
+  ]
+}

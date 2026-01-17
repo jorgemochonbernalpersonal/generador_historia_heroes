@@ -14,9 +14,11 @@ __pycache__/
 # Archivos generados por el programa (directorio historias)
 historias/
 
-# Variables de entorno
+# Variables de entorno (IMPORTANTE: protege tu API key)
 .env
 .env.local
+.env.*
+!.env.example
 
 # IDEs
 .vscode/
@@ -27,3 +29,11 @@ historias/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Logs y archivos temporales
+*.log
+*.tmp
+*.bak
+*.swp
+*~

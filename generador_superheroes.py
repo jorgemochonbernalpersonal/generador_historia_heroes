@@ -32,32 +32,46 @@ Fecha: 2024
 def pedir_a_la_ia(mensaje):
     """
     Esta función llama a la IA para generar historias.
-    El profesor ya la configuró, los niños solo la usan.
+    Configurada para usar Groq (gratis y rápido).
+
+    La API key se lee del archivo .env para mayor seguridad.
     """
-    # NOTA PARA EL PROFESOR:
-    # Aquí debe ir la llamada real a la API de IA (OpenAI, Anthropic, etc.)
-    # Por ejemplo:
-    # import openai
-    # response = openai.ChatCompletion.create(...)
-    # return response.choices[0].message.content
+    import os
 
-    # MODO DEMO: Genera una historia de ejemplo más realista
-    # Extraer información del mensaje para crear una historia coherente
-    import re
+    # Intentar cargar variables de entorno desde .env
+    try:
+        from dotenv import load_dotenv
 
-    # Intentar extraer nombre, poder y origen del mensaje
-    nombre_match = re.search(r"llamado (\w+(?:\s+\w+)?)", mensaje)
-    poder_match = re.search(r"poder de ([^.]+)", mensaje)
-    origen_match = re.search(r"viene de ([^.]+)", mensaje)
+        # Cargar .env con encoding UTF-8 explícito
+        load_dotenv(encoding="utf-8")
+    except ImportError:
+        # Si no está instalado python-dotenv, intentar leer directamente
+        pass
+    except Exception as e:
+        # Si hay error al cargar .env, continuar sin él (modo demo)
+        pass
 
-    nombre = nombre_match.group(1) if nombre_match else "el superhéroe"
-    poder = poder_match.group(1).strip() if poder_match else "poderes especiales"
-    origen = (
-        origen_match.group(1).strip() if origen_match else "circunstancias especiales"
-    )
+    # Leer API key del archivo .env o variable de entorno
+    API_KEY_GROQ = os.getenv("GROQ_API_KEY") or os.getenv("API_KEY_GROQ")
 
-    # Generar una historia de ejemplo más realista
-    historia = f"""HISTORIA DE {nombre.upper()}
+    # Si no está configurada, usar modo demo
+    if not API_KEY_GROQ:
+        # MODO DEMO: Genera una historia de ejemplo
+        import re
+
+        nombre_match = re.search(r"llamado (\w+(?:\s+\w+)?)", mensaje)
+        poder_match = re.search(r"poder de ([^.]+)", mensaje)
+        origen_match = re.search(r"viene de ([^.]+)", mensaje)
+
+        nombre = nombre_match.group(1) if nombre_match else "el superhéroe"
+        poder = poder_match.group(1).strip() if poder_match else "poderes especiales"
+        origen = (
+            origen_match.group(1).strip()
+            if origen_match
+            else "circunstancias especiales"
+        )
+
+        historia = f"""HISTORIA DE {nombre.upper()}
 
 {nombre} es un superhéroe extraordinario cuya vida cambió para siempre cuando {origen}. 
 Este evento transformó completamente su existencia y le otorgó el increíble poder de {poder}.
@@ -73,7 +87,56 @@ sus poderes especiales lo convierten en un verdadero héroe.
 La historia de {nombre} es una inspiración para todos aquellos que creen que un solo 
 individuo puede marcar la diferencia en el mundo."""
 
-    return historia
+        return historia
+
+    # MODO REAL: Usar Groq API
+    try:
+        from groq import Groq
+
+        client = Groq(api_key=API_KEY_GROQ)
+
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",  # Modelo rápido y gratuito
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Eres un escritor creativo que crea historias de superhéroes para niños de 10 años. Las historias deben ser cortas (3-4 párrafos), emocionantes y apropiadas para niños.",
+                },
+                {"role": "user", "content": mensaje},
+            ],
+            max_tokens=300,
+            temperature=0.8,
+        )
+
+        return response.choices[0].message.content
+
+    except Exception as e:
+        # Si hay error, mostrar mensaje y usar modo demo
+        print(f"\n[AVISO] Error al conectar con Groq: {e}")
+        print("[INFO] Usando modo demo...")
+
+        # Volver a modo demo como fallback
+        import re
+
+        nombre_match = re.search(r"llamado (\w+(?:\s+\w+)?)", mensaje)
+        poder_match = re.search(r"poder de ([^.]+)", mensaje)
+        origen_match = re.search(r"viene de ([^.]+)", mensaje)
+
+        nombre = nombre_match.group(1) if nombre_match else "el superhéroe"
+        poder = poder_match.group(1).strip() if poder_match else "poderes especiales"
+        origen = (
+            origen_match.group(1).strip()
+            if origen_match
+            else "circunstancias especiales"
+        )
+
+        return f"""HISTORIA DE {nombre.upper()}
+
+{nombre} es un superhéroe extraordinario cuya vida cambió para siempre cuando {origen}. 
+Este evento transformó completamente su existencia y le otorgó el increíble poder de {poder}.
+
+Desde ese momento, {nombre} ha dedicado su vida a usar sus habilidades para proteger 
+a los inocentes y luchar contra el mal."""
 
 
 # ============================================
@@ -101,6 +164,13 @@ def preguntar(texto, requerido=True):
             print("  [AVISO] Este campo es obligatorio. Por favor, escribe algo.")
             continue
         return respuesta
+
+
+def es_respuesta_afirmativa(respuesta):
+    """Verifica si la respuesta es afirmativa (s, si, sí, yes, y)"""
+    respuesta_limpia = respuesta.strip().lower()
+    respuestas_afirmativas = ["s", "si", "sí", "yes", "y", "ok", "vale"]
+    return respuesta_limpia in respuestas_afirmativas
 
 
 def limpiar_nombre_archivo(nombre):
@@ -272,12 +342,8 @@ def crear_superheroe_simple():
     print("=" * 50)
 
     # Preguntar si quiere guardar
-    guardar = (
-        input("\n¿Quieres guardar este superhéroe en un archivo? (s/n): ")
-        .strip()
-        .lower()
-    )
-    if guardar == "s":
+    guardar = input("\n¿Quieres guardar este superhéroe en un archivo? (s/n): ")
+    if es_respuesta_afirmativa(guardar):
         # Crear formato más completo y estructurado para guardar
         contenido_guardar = f"""INFORMACIÓN DEL SUPERHÉROE
 
@@ -343,10 +409,8 @@ def crear_superheroe_con_ia():
     print("=" * 50)
 
     # Preguntar si quiere guardar
-    guardar = (
-        input("\n¿Quieres guardar esta historia en un archivo? (s/n): ").strip().lower()
-    )
-    if guardar == "s":
+    guardar = input("\n¿Quieres guardar esta historia en un archivo? (s/n): ")
+    if es_respuesta_afirmativa(guardar):
         historias = [{"nombre": nombre, "historia": historia}]
         nombre_archivo = f"historia_{limpiar_nombre_archivo(nombre)}.txt"
         guardar_historias(historias, nombre_archivo)
@@ -391,25 +455,29 @@ def obtener_lista_superheroes():
         else:
             return superheroes
 
-    # Lista predefinida
+    # Lista predefinida (cargar desde JSON)
     if opcion == "1" or opcion != "2":
-        return [
-            {
-                "nombre": "Rayo Veloz",
-                "poder": "velocidad y electricidad",
-                "origen": "un accidente con un rayo",
-            },
-            {
-                "nombre": "Sombra Nocturna",
-                "poder": "invisibilidad",
-                "origen": "un experimento científico",
-            },
-            {
-                "nombre": "Fuerza Mental",
-                "poder": "telequinesis",
-                "origen": "nacimiento con poderes especiales",
-            },
-        ]
+        datos = cargar_datos_superheroes()
+        return datos.get(
+            "lista_predefinida",
+            [
+                {
+                    "nombre": "Rayo Veloz",
+                    "poder": "velocidad y electricidad",
+                    "origen": "un accidente con un rayo",
+                },
+                {
+                    "nombre": "Sombra Nocturna",
+                    "poder": "invisibilidad",
+                    "origen": "un experimento científico",
+                },
+                {
+                    "nombre": "Fuerza Mental",
+                    "poder": "telequinesis",
+                    "origen": "nacimiento con poderes especiales",
+                },
+            ],
+        )
 
 
 def crear_varios_superheroes():
@@ -475,10 +543,8 @@ def crear_varios_superheroes():
     print()
 
     # Preguntar si quiere guardar
-    guardar = (
-        input("¿Quieres guardar las historias en un archivo? (s/n): ").strip().lower()
-    )
-    if guardar == "s":
+    guardar = input("¿Quieres guardar las historias en un archivo? (s/n): ")
+    if es_respuesta_afirmativa(guardar):
         guardar_historias(todas_las_historias)
 
     return todas_las_historias
@@ -487,71 +553,57 @@ def crear_varios_superheroes():
 # ============================================
 # MODO ALEATORIO: Generar superhéroes aleatorios
 # ============================================
+def cargar_datos_superheroes():
+    """Carga los datos de superhéroes desde el archivo JSON"""
+    import json
+    import os
+
+    try:
+        ruta_json = os.path.join(os.path.dirname(__file__), "datos_superheroes.json")
+        with open(ruta_json, "r", encoding="utf-8") as archivo:
+            return json.load(archivo)
+    except FileNotFoundError:
+        # Si no existe el JSON, usar datos por defecto
+        return {
+            "nombres": ["Rayo Veloz", "Sombra Nocturna", "Fuerza Mental"],
+            "poderes": ["velocidad", "invisibilidad", "telequinesis"],
+            "origenes": ["un accidente", "un experimento", "nacimiento"],
+            "lista_predefinida": [
+                {"nombre": "Rayo Veloz", "poder": "velocidad", "origen": "un accidente"}
+            ],
+        }
+    except Exception:
+        # En caso de error, devolver datos mínimos
+        return {
+            "nombres": ["Superhéroe"],
+            "poderes": ["poderes especiales"],
+            "origenes": ["origen especial"],
+            "lista_predefinida": [],
+        }
+
+
 def generar_superheroe_aleatorio():
     """Genera un superhéroe aleatorio con nombre, poder y origen"""
     import random
 
-    nombres = [
-        "Rayo Veloz",
-        "Sombra Nocturna",
-        "Fuerza Mental",
-        "Aurora Brillante",
-        "Tormenta Eléctrica",
-        "Nebulosa",
-        "Fénix",
-        "Titanio",
-        "Vórtice",
-        "Cristal",
-        "Llama Azul",
-        "Hielo Eterno",
-        "Relámpago",
-        "Eco",
-    ]
-
-    poderes = [
-        "velocidad sobrehumana",
-        "invisibilidad",
-        "telequinesis",
-        "volar",
-        "super fuerza",
-        "control del fuego",
-        "control del hielo",
-        "telepatía",
-        "regeneración",
-        "camuflaje",
-        "teletransportación",
-        "rayos láser",
-        "control magnético",
-        "manipulación del tiempo",
-    ]
-
-    origenes = [
-        "un accidente con radiación",
-        "un experimento científico",
-        "nacimiento con poderes especiales",
-        "un encuentro con un meteorito",
-        "una mutación genética",
-        "un artefacto antiguo",
-        "entrenamiento extremo",
-        "una fusión con tecnología alienígena",
-        "un pacto místico",
-        "exposición a energía cósmica",
-    ]
+    datos = cargar_datos_superheroes()
 
     return {
-        "nombre": random.choice(nombres),
-        "poder": random.choice(poderes),
-        "origen": random.choice(origenes),
+        "nombre": random.choice(datos["nombres"]),
+        "poder": random.choice(datos["poderes"]),
+        "origen": random.choice(datos["origenes"]),
     }
 
 
 def crear_superheroes_aleatorios():
     """Crea varios superhéroes aleatorios automáticamente usando IA"""
     mostrar_titulo()
-    print("MODO ALEATORIO: Crear superhéroes aleatorios automáticamente")
+    print("MODO ALEATORIO: Generar superhéroes aleatorios con IA")
     mostrar_separador()
 
     print("Este modo genera superhéroes aleatorios automáticamente.")
+    print("El programa crea nombres, poderes y orígenes aleatorios,")
+    print("y luego usa IA para generar historias creativas para cada uno.")
     print("¡Es divertido ver qué personajes se crean!")
     print()
 
@@ -590,7 +642,9 @@ def crear_superheroes_aleatorios():
     todas_las_historias = []
 
     for i, heroe in enumerate(superheroes, 1):
-        print(f"[{i}/{len(superheroes)}] Generando historia de {heroe['nombre']}...")
+        print(
+            f"[{i}/{len(superheroes)}] Generando historia de {heroe['nombre']} con IA..."
+        )
 
         # Construir el mensaje para la IA
         mensaje = f"Crea una historia corta y divertida sobre un superhéroe llamado {heroe['nombre']} "
@@ -602,7 +656,7 @@ def crear_superheroes_aleatorios():
 
         todas_las_historias.append({"nombre": heroe["nombre"], "historia": historia})
 
-        print(f"  [OK] Historia de {heroe['nombre']} completada!\n")
+        print(f"  [OK] Historia de {heroe['nombre']} generada con IA!\n")
 
     # Mostrar todos los resultados
     print("\n" + "=" * 50)
@@ -619,17 +673,18 @@ def crear_superheroes_aleatorios():
         print()
 
     print("=" * 50)
-    print(f"\n¡Listo! Se generaron {len(superheroes)} historias automáticamente.")
     print(
-        "El programa creó los superhéroes y sus historias sin que tú tuvieras que escribir nada."
+        f"\n¡Listo! Se generaron {len(superheroes)} historias automáticamente con IA."
     )
+    print(
+        "El programa creó los superhéroes aleatorios y usó IA para generar sus historias"
+    )
+    print("sin que tú tuvieras que escribir nada.")
     print()
 
     # Preguntar si quiere guardar
-    guardar = (
-        input("¿Quieres guardar las historias en un archivo? (s/n): ").strip().lower()
-    )
-    if guardar == "s":
+    guardar = input("¿Quieres guardar las historias en un archivo? (s/n): ")
+    if es_respuesta_afirmativa(guardar):
         guardar_historias(todas_las_historias, "superheroes_aleatorios.txt")
 
     return todas_las_historias
@@ -647,7 +702,7 @@ def mostrar_menu():
     print("  1. Nivel 1: Crear un superhéroe simple (sin IA)")
     print("  2. Nivel 2: Crear un superhéroe con IA")
     print("  3. Nivel 2 Avanzado: Crear varios superhéroes automáticamente")
-    print("  4. Modo Aleatorio: Generar superhéroes aleatorios (¡divertido!)")
+    print("  4. Modo Aleatorio: Generar superhéroes aleatorios con IA (¡divertido!)")
     print("  5. Ver historias guardadas")
     print("  6. Ver estadísticas")
     print("  7. Ver información sobre el programa")
@@ -719,8 +774,9 @@ def mostrar_informacion():
     print("    - El programa procesa tus datos automáticamente")
     print("    - Muestra claramente: entrada → proceso → salida")
     print()
-    print("  Opción 4 (Aleatorio):")
+    print("  Opción 4 (Aleatorio con IA):")
     print("    - El programa genera superhéroes aleatorios")
+    print("    - Usa IA para crear historias creativas")
     print("    - Más divertido, menos control")
     print("    - También demuestra automatización")
     print()

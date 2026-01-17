@@ -11,5 +11,11 @@
 # Para Anthropic (Claude):
 # anthropic>=0.18.0
 
+# Para Groq (gratis y rápido):
+# groq>=1.0.0
+
+# Para leer archivos .env (recomendado para guardar API keys):
+# python-dotenv>=1.0.0
+
 # Otras dependencias opcionales:
 # (ninguna por ahora)
